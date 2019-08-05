@@ -11,7 +11,7 @@ import argparse
 
 def requests_retry_session(
     retries=3,
-    backoff_factor=1,
+    backoff_factor=5,
     status_forcelist=(500, 502, 504),
     session=None,
 ):
@@ -36,12 +36,12 @@ def latest(asNR):
         return requests_retry_session().get(pull_data)
         pass
     except Exception as e:
-        syslog.syslog(syslog.LOG_ERR, 'Failed 3 times to get url for AS2ipset for {}'.format(asNR))
+        syslog.syslog(syslog.LOG_ERR, 'Failed 3 times connecting to stat.ripe.net in AS2ipset for {}'.format(asNR))
         sys.exit()
 
 
 def main():
-    parser = argparse.ArgumentParser(description='rrr')
+    parser = argparse.ArgumentParser(description='Create ipset net:hash per AS')
     parser.add_argument('--AS', type=int,
                         help='AS number to fetch prefixes for')
     parser.add_argument('--deploy',
